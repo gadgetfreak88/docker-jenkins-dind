@@ -8,12 +8,8 @@
       volumes:  "-v /your/:/var/jenkins_home"
 
     tasks:
-      - name: docker pull image
-        command: "/usr/local/bin/docker pull jenkins:latest"
-      - name: docker stop 
-        command: "/usr/local/bin/docker container stop {{ container_name }}"
-        ignore_errors: yes
-      - name: docker container 
-        command: "/usr/local/bin/docker run --rm -d {{ ports }} --name {{ container_name }} {{ image_name }}"
-      - name: docker run nginx
-        command: "/usr/local/bin/docker container ls -f name={{ container_name }}"
+      - name: docker container logs
+        shell: "/usr/local/bin/docker logs jenkins 2>&1 | grep password -A 2"
+        register: result
+      - debug:
+          msg: "{{ result.stdout_lines }}"
