@@ -1,0 +1,35 @@
+---
+  - hosts: nas
+
+    vars:
+      container_name: "jenkins-dind"
+      path: /tmp/git-repo/docker-jenkins-dind
+
+    tasks:
+    - name: clone git repo
+      git:
+        repo: https://github.com/gadgetfreak88/docker-jenkins-dind.git
+        version: master
+        dest: "{{ path }}"
+        accept_hostkey: yes
+        force: yes
+      register: gitresult
+    - debug: msg="SHA-1 before git update is {{ gitresult.before[0:8] }}"
+    - debug: msg="SHA-1 after git update is {{ gitresult.after[0:8] }}"
+
+    - name: build docker image
+      command: "/usr/local/bin/docker build -t {{ container_name }}:{{ gitresult.after[0:8] }} ."
+      args:
+        chdir: "{{ path }}"
+      register: buildresult
+    - debug:
+        msg: "{{ buildresult.stdout_lines }}"
+
+    - name: list docker images
+      command: "/usr/local/bin/docker image ls -f reference={{ container_name }}"
+      args:
+        chdir: "{{ path }}"
+      register: imageresult
+    - debug:
+        msg: "{{ imageresult.stdout_lines }}"
+    
