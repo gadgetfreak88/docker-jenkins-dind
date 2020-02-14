@@ -1,0 +1,24 @@
+---
+  - hosts: nas
+
+    vars:
+      image_name: "jenkins-dind:latest"
+      container_name: "jenkins"
+      ports: "-p 8888:8080"
+      volumes:  "-v /your/:/var/jenkins_home"
+
+    tasks:
+      - name: docker stop 
+        command: "/usr/local/bin/docker container stop {{ container_name }}"
+        ignore_errors: yes
+      - name: wait for container to stop
+        pause:
+          seconds: 10
+      - name: docker run
+        command: "/usr/local/bin/docker run --rm -d {{ ports }} --name {{ container_name }} {{ image_name }}"
+      - name: docker container ls 
+        command: "/usr/local/bin/docker container ls -f name={{ container_name }}"
+        register: result
+      - debug:
+          msg: "{{ result.stdout_lines }}"
+    

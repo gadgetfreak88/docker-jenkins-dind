@@ -18,7 +18,7 @@
     - debug: msg="SHA-1 after git update is {{ gitresult.after[0:8] }}"
 
     - name: build docker image
-      command: "/usr/local/bin/docker build -t {{ container_name }}:{{ gitresult.after[0:8] }} ."
+      command: "/usr/local/bin/docker build -t {{ container_name }}:latest ."
       args:
         chdir: "{{ path }}"
       register: buildresult
