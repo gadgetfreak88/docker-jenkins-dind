@@ -1,1 +1,6 @@
-
+- hosts: nas
+  tasks:
+  - name: create jenkins directory
+    file:
+      path: /volume2/docker/jenkins
+      state: directory
