@@ -5,7 +5,7 @@
       image_name: "jenkins-dind:latest"
       container_name: "jenkins"
       ports: "-p 8888:8080"
-      volumes:  "-v /volume2/docker/jenkins:/var/jenkins_home"
+      volumes:  "-v /volume2/docker/jenkins:/var/jenkins_home -v /var/run/docker.sock:/var/run/docker.sock"
 
     tasks:
       - name: docker stop 
