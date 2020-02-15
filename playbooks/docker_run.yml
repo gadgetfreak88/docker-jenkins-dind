@@ -5,7 +5,7 @@
       image_name: "jenkins-dind:latest"
       container_name: "jenkins"
       ports: "-p 8888:8080"
-      volumes:  "-v /your/:/var/jenkins_home"
+      volumes:  "-v /volume2/docker/jenkins:/var/jenkins_home"
 
     tasks:
       - name: docker stop 
@@ -13,9 +13,9 @@
         ignore_errors: yes
       - name: wait for container to stop
         pause:
-          seconds: 10
+          seconds: 12
       - name: docker run
-        command: "/usr/local/bin/docker run --rm -d {{ ports }} --name {{ container_name }} {{ image_name }}"
+        command: "/usr/local/bin/docker run --rm -d {{ ports }} {{ volumes }} --name {{ container_name }} {{ image_name }}"
       - name: docker container ls 
         command: "/usr/local/bin/docker container ls -f name={{ container_name }}"
         register: result
