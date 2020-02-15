@@ -1,15 +1,10 @@
 ---
   - hosts: nas
 
-    vars:
-      image_name: "jenkins/jenkins"
-      container_name: "jenkins"
-      ports: "-p 8888:8080 -p 50000:50000"
-      volumes:  "-v /your/:/var/jenkins_home"
-
     tasks:
       - name: docker container logs
         shell: "/usr/local/bin/docker logs jenkins 2>&1 | grep password -A 2"
+        ignore_errors: yes
         register: result
         changed_when: false
       - debug:
