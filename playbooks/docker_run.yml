@@ -13,9 +13,9 @@
         ignore_errors: yes
       - name: wait for container to stop
         pause:
-          seconds: 12
+          seconds: 15
       - name: docker run
-        command: "/usr/local/bin/docker run --rm -d {{ ports }} {{ volumes }} --name {{ container_name }} {{ image_name }}"
+        command: "/usr/local/bin/docker run --restart always --label traefik.http.routers.jenkins.rule=Host(`jenkins.docker.nas`)  --label traefik.port=8888 -d {{ ports }} {{ volumes }} --name {{ container_name }} {{ image_name }}"
       - name: docker container ls 
         command: "/usr/local/bin/docker container ls -f name={{ container_name }}"
         register: result
