@@ -9,6 +9,13 @@ RUN add-apt-repository \
    $(lsb_release -cs) \
    stable"
 RUN apt-get update  -qq \
-    && apt-get install docker-ce=17.12.1~ce-0~debian ansible -y \
+    && apt-get install docker-ce ansible -y \
     && apt-get clean
+
+# docker-compose
+RUN curl -L https://github.com/docker/compose/releases/download/1.16.1/docker-compose-`uname -s`-`uname -m` -o /usr/local/bin/docker-compose \
+    && chmod +x /usr/local/bin/docker-compose
+
 RUN usermod -aG docker jenkins
+
+#USER jenkins
